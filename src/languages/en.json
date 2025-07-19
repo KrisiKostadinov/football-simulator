@@ -5,5 +5,21 @@
   "register": "Register",
   "register_title": "Create an Account",
   "login": "Login",
-  "login_title": "Log into your account"
+  "login_title": "Log into your account",
+  "login_description": "Log into your account to continue to the football game, manage your team, and adjust your account settings. If you don't have an account, register quickly and easily!",
+  "register_description": "Register quickly and easily to join our football simulator. Create an account, choose your team, and start competing with other players. Welcome to the community of football fans!",
+  "form_title": "Register",
+  "first_name": "First Name",
+  "last_name": "Last Name",
+  "username": "Username",
+  "team_name": "Team Name",
+  "email": "Email",
+  "password": "Password",
+  "role": "Role",
+  "user": "User",
+  "admin": "Administrator",
+  "moderator": "Moderator",
+  "submit_register": "Register",
+  "submit_login": "Login",
+  "submit": "Submit"
 }
