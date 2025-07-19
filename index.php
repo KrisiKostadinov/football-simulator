@@ -2,10 +2,17 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use Core\Database;
 use Core\Router;
+use Dotenv\Dotenv;
 
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
+
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$pdo = Database::getInstance()->getConnection();
 
 $router = new Router();
 
