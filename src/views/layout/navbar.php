@@ -13,12 +13,21 @@ $class_names = 'class="hover:text-green-500 transition-colors duration-300"';
             <li>
                 <a href="/" <?= $class_names ?> title="<?= __('home_title') ?>"><?= __('home') ?></a>
             </li>
-            <li>
-                <a href="/users/register" <?= $class_names ?> title="<?= __('register_title') ?>"><?= __('register') ?></a>
-            </li>
-            <li>
-                <a href="/users/login" <?= $class_names ?> title="<?= __('login_title') ?>"><?= __('login') ?></a>
-            </li>
+            <?php if (isset($_SESSION['user']) && !empty($_SESSION['user']['id'])): ?>
+                <li>
+                    <a href="/users/profile" <?= $class_names ?> title="<?= __('profile_title') ?>"><?= __('hello') ?>, <?= $_SESSION['user']['first_name'] ?></a>
+                </li>
+                <li>
+                    <a href="/users/logout" <?= $class_names ?> title="<?= __('logout_title') ?>"><?= __('logout') ?></a>
+                </li>
+            <?php else: ?>
+                <li>
+                    <a href="/users/register" <?= $class_names ?> title="<?= __('register_title') ?>"><?= __('register') ?></a>
+                </li>
+                <li>
+                    <a href="/users/login" <?= $class_names ?> title="<?= __('login_title') ?>"><?= __('login') ?></a>
+                </li>
+            <?php endif; ?>
         </ul>
     </div>
 </div>

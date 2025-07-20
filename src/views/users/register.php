@@ -11,7 +11,9 @@
     <form action="/users/register" method="POST" class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg grid gap-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <?php if (isset($errors['general'])): ?>
-                <p class="text-red-500 text-sm mt-1"><?= $errors['general'] ?></p>
+                <div class="bg-red-100 py-3 px-5 rounded border border-red-200">
+                    <p class="text-red-500 text-sm mt-1"><?= $errors['general'] ?></p>
+                </div>
             <?php endif; ?>
 
             <div>

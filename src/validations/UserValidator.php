@@ -38,4 +38,19 @@ class UserValidator
 
         return $errors;
     }
+
+    public static function validateLogin(array $data): array
+    {
+        $errors = [];
+
+        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = __('validation_email');
+        }
+
+        if (empty($data['password']) || strlen($data['password']) < 6) {
+            $errors['password'] = __('validation_password');
+        }
+
+        return $errors;
+    }
 }

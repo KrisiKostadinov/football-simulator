@@ -9,15 +9,27 @@
 
     <p class="mb-6 text-gray-600 text-center max-w-xl mx-auto"><?= __('login_description') ?></p>
 
-    <form action="/users/register" method="POST" class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg grid gap-5">
+    <form action="/users/login" method="POST" class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg grid gap-5">
+        <?php if (isset($errors['general'])): ?>
+            <div class="bg-red-100 py-3 px-5 rounded border border-red-200">
+                <p class="text-red-500 text-sm mt-1"><?= $errors['general'] ?></p>
+            </div>
+        <?php endif; ?>
+        
         <div>
             <label for="email" class="<?= $label_class_names ?>"><?= __('email') ?></label>
-            <input type="email" id="email" name="email" required class="<?= $input_class_names ?>" />
+            <input type="email" id="email" value="<?= $old['email'] ?? '' ?>" name="email" class="<?= $input_class_names ?>" />
+            <?php if (isset($errors['email'])): ?>
+                <p class="text-red-500 text-sm mt-1"><?= $errors['email'] ?></p>
+            <?php endif; ?>
         </div>
 
         <div>
             <label for="password" class="<?= $label_class_names ?>"><?= __('password') ?></label>
-            <input type="password" id="password" name="password" required class="<?= $input_class_names ?>" />
+            <input type="password" id="password" value="<?= $old['password'] ?? '' ?>" name="password" class="<?= $input_class_names ?>" />
+            <?php if (isset($errors['password'])): ?>
+                <p class="text-red-500 text-sm mt-1"><?= $errors['password'] ?></p>
+            <?php endif; ?>
         </div>
 
         <button type="submit" class="outline-none cursor-pointer w-full bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white font-semibold py-3 rounded-md transition-shadow shadow-md hover:shadow-lg focus:shadow-lg">
