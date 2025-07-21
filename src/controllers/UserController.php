@@ -34,6 +34,19 @@ class UserController
         View::render('users/login', ['title' => __('login_title')]);
     }
 
+    public function changePassword(string $token)
+    {
+        $user = $this->userRepository->findByPasswordResetToken($token);
+        if (!$user || strtotime($user['token_expiration']) >= time()) {
+            $_SESSION['message_error'] = __('invalid_token');
+            header('Location: /users/forgot-password');
+            exit;
+        }
+
+        $_SESSION['reset_token'] = $token;
+        View::render('users/change_password', ['title' => __('change_password_title')]);
+    }
+
     public function forgotPassword()
     {
         View::render('users/forgot_password', ['title' => __('forgot_password_title')]);
@@ -155,7 +168,7 @@ class UserController
         }
 
         $token = bin2hex(random_bytes(32));
-        $resetLink = Router::getDomain() . '/reset-password?token=' . $token;
+        $resetLink = Router::getDomain() . '/users/change-password' . '/' . $token;
         $this->userRepository->savePasswordResetToken($token, $user['id']);
 
         $html = MailService::renderTemplatePlaceholders(
@@ -182,6 +195,41 @@ class UserController
                 'old' => $formData
             ]);
         }
+    }
+
+    public function changePasswordAction()
+    {
+        $formData = $_POST;
+        $errors = UserValidator::validateChangePassword($formData);
+
+        if (!empty($errors)) {
+            return View::render('users/change-password', [
+                'title' => __('change_password_title'),
+                'errors' => $errors,
+                'old' => $formData
+            ]);
+        }
+
+        $user = $this->userRepository->findByPasswordResetToken($_SESSION['reset_token']);
+        if (!$user || strtotime($user['token_expiration']) >= time()) {
+            $_SESSION['message_error'] = __('invalid_token');
+            header('Location: /users/forgot-password');
+            exit;
+        }
+
+        if ($this->userRepository->updatePassword($user['id'])) {
+            $_SESSION['message_success'] = __('password_changed_successfully');
+            header('Location: /users/login');
+            unset($_SESSION['reset_token']);
+            exit;
+        }
+
+        $_SESSION['message_error'] = __('password_change_failed');
+        return View::render('users/change-password', [
+            'title' => __('change_password_title'),
+            'errors' => ['general' => __('password_change_failed')],
+            'old' => $formData
+        ]);
     }
 
     public function isAuthenticated(): bool

@@ -64,4 +64,23 @@ class UserValidator
 
         return $errors;
     }
+
+    public static function validateChangePassword(array $data): array
+    {
+        $errors = [];
+
+        if (empty($data['current_password']) || strlen($data['current_password']) < 6) {
+            $errors['current_password'] = __('validation_current_password');
+        }
+
+        if (empty($data['new_password']) || strlen($data['new_password']) < 6) {
+            $errors['new_password'] = __('validation_new_password');
+        }
+
+        if (($data['new_password'] ?? '') !== ($data['new_password_confirm'] ?? '')) {
+            $errors['new_password_confirm'] = __('validation_new_password_confirm');
+        }
+
+        return $errors;
+    }
 }

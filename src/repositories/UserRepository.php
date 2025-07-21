@@ -86,7 +86,7 @@ class UserRepository
 
     public function savePasswordResetToken(string $token, int $userId): bool
     {
-        $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
+        $expiration = time() + 3600;
 
         $stmt = $this->db->prepare("
         UPDATE users 
@@ -97,6 +97,33 @@ class UserRepository
         return $stmt->execute([
             ':token' => $token,
             ':expiration' => $expiration,
+            ':id' => $userId
+        ]);
+    }
+
+    public function findByPasswordResetToken(string $token): ?array
+    {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE password_reset_token = :token LIMIT 1");
+        $stmt->execute([':token' => $token]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ?: null;
+    }
+
+    public function updatePassword(int $userId): bool
+    {
+        $stmt = $this->db->prepare("
+        UPDATE users 
+        SET password = :password, 
+            password_reset_token = :token, 
+            token_expiration = :expiration 
+        WHERE id = :id
+    ");
+
+        return $stmt->execute([
+            ':password' => password_hash($_POST['new_password'], PASSWORD_DEFAULT),
+            ':token' => null,
+            ':expiration' => null,
             ':id' => $userId
         ]);
     }
