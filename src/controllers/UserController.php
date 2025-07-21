@@ -4,8 +4,10 @@ namespace App\Controllers;
 
 use Core\Database;
 use Core\JwtHelper;
+use Core\MailService;
 use App\Validations\UserValidator;
 use App\Repositories\UserRepository;
+use Core\Router;
 use Core\View;
 
 require_once dirname(__DIR__) . '/helpers/languages.php';
@@ -32,6 +34,11 @@ class UserController
         View::render('users/login', ['title' => __('login_title')]);
     }
 
+    public function forgotPassword()
+    {
+        View::render('users/forgot_password', ['title' => __('forgot_password_title')]);
+    }
+
     public function registerAction()
     {
         $formData = $_POST;
@@ -48,7 +55,7 @@ class UserController
         $isFirstUser = $this->userRepository->countUsers() === 0;
         $formData['role'] = $isFirstUser ? 'admin' : 'user';
 
-        $emailExists    = $this->userRepository->findByEmail($formData['email']);
+        $emailExists = $this->userRepository->findByEmail($formData['email']);
         $usernameExists = $this->userRepository->findByUsername($formData['username']);
         $teamNameExists = $this->userRepository->findByTeamName($formData['team_name'] ?? '');
 
@@ -121,6 +128,60 @@ class UserController
         unset($_SESSION['user']);
         header('Location: /');
         exit;
+    }
+
+    public function forgotPasswordAction()
+    {
+        $formData = $_POST;
+        $errors = UserValidator::validateForgotPassword($formData);
+
+        if (!empty($errors)) {
+            return View::render('users/forgot_password', [
+                'title' => __('forgot_password_title'),
+                'errors' => $errors,
+                'old' => $formData
+            ]);
+        }
+
+        $user = $this->userRepository->findByEmail($formData['email']);
+
+        if (!$user) {
+            $errors['email'] = __('email_not_found');
+            return View::render('users/forgot_password', [
+                'title' => __('forgot_password_title'),
+                'errors' => $errors,
+                'old' => $formData
+            ]);
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $resetLink = Router::getDomain() . '/reset-password?token=' . $token;
+        $this->userRepository->savePasswordResetToken($token, $user['id']);
+
+        $html = MailService::renderTemplatePlaceholders(
+            file_get_contents(dirname(__DIR__) . '/views/email-templates/forgot-password-bg.php'),
+            [
+                'website_name' => __('website_title'),
+                'first_name' => $user['first_name'],
+                'reset_link' => $resetLink
+            ]
+        );
+
+        $mail = new MailService();
+        $result = $mail->send($user['email'], __('forgot_password_title'), $html);
+
+        if ($result) {
+            $_SESSION['message_success'] = __('forgot_password_sent');
+            header('Location: /users/login');
+            exit;
+        } else {
+            $_SESSION['message_error'] = __('email_send_failed');
+            return View::render('users/forgot_password', [
+                'title' => __('forgot_password_title'),
+                'errors' => ['email' => __('email_send_failed')],
+                'old' => $formData
+            ]);
+        }
     }
 
     public function isAuthenticated(): bool

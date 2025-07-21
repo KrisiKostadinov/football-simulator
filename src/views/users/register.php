@@ -74,6 +74,10 @@
                 <?php endif; ?>
             </div>
         </div>
+
+        <div>
+            <a href="/users/login"><?= __('have_profile_yet') ?></a>
+        </div>
         
         <button type="submit"
             class="outline-none cursor-pointer w-full bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white font-semibold py-3 rounded-md transition-shadow shadow-md hover:shadow-lg focus:shadow-lg">

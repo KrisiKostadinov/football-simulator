@@ -5,18 +5,11 @@
 <?php $label_class_names = 'block text-sm font-medium text-gray-700 mb-2' ?>
 
 <main>
-    <h1 class="my-5 text-4xl text-center">Вход в профила</h1>
+    <h1 class="my-5 text-4xl text-center"><?= __('forgot_password_title') ?></h1>
 
-    <p class="mb-6 text-gray-600 text-center max-w-xl mx-auto"><?= __('login_description') ?></p>
+    <p class="mb-6 text-gray-600 text-center max-w-xl mx-auto"><?= __('forgot_password_description') ?></p>
 
-    <form action="/users/login" method="POST" class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg grid gap-5">
-        <?php if (!empty($_SESSION['message_success'])): ?>
-            <div class="bg-green-100 py-3 px-5 rounded border border-green-200">
-                <p class="text-green-500 text-sm mt-1"><?= $_SESSION['message_success'] ?></p>
-            </div>
-            <?php unset($_SESSION['message_success']); ?>
-        <?php endif; ?>
-
+    <form action="/users/forgot-password" method="POST" class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg grid gap-5">
         <?php if (isset($errors['general'])): ?>
             <div class="bg-red-100 py-3 px-5 rounded border border-red-200">
                 <p class="text-red-500 text-sm mt-1"><?= $errors['general'] ?></p>
@@ -32,18 +25,7 @@
         </div>
 
         <div>
-            <label for="password" class="<?= $label_class_names ?>"><?= __('password') ?></label>
-            <input type="password" id="password" value="<?= $old['password'] ?? '' ?>" name="password" class="<?= $input_class_names ?>" />
-            <?php if (isset($errors['password'])): ?>
-                <p class="text-red-500 text-sm mt-1"><?= $errors['password'] ?></p>
-            <?php endif; ?>
-        </div>
-
-        <div>
-            <a href="/users/register"><?= __('not_profile_yet') ?></a>
-        </div>
-        <div>
-            <a href="/users/forgot-password"><?= __('forgot_password') ?></a>
+            <a href="/users/login"><?= __('login_title') ?></a>
         </div>
 
         <button type="submit" class="outline-none cursor-pointer w-full bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white font-semibold py-3 rounded-md transition-shadow shadow-md hover:shadow-lg focus:shadow-lg">

@@ -83,4 +83,21 @@ class UserRepository
         $stmt = $this->db->prepare("DELETE FROM users WHERE id = :id");
         return $stmt->execute([':id' => $id]);
     }
+
+    public function savePasswordResetToken(string $token, int $userId): bool
+    {
+        $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+        $stmt = $this->db->prepare("
+        UPDATE users 
+        SET password_reset_token = :token, token_expiration = :expiration 
+        WHERE id = :id
+    ");
+
+        return $stmt->execute([
+            ':token' => $token,
+            ':expiration' => $expiration,
+            ':id' => $userId
+        ]);
+    }
 }

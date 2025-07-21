@@ -53,4 +53,15 @@ class UserValidator
 
         return $errors;
     }
+
+    public static function validateForgotPassword(array $data): array
+    {
+        $errors = [];
+
+        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = __('validation_email');
+        }
+
+        return $errors;
+    }
 }

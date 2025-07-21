@@ -9,27 +9,31 @@ class Router
     public function addRoute(string $method, string $pattern, array $action, array $middleware = []): void
     {
         $this->routes[] = [
-            'method'     => strtoupper($method),
-            'pattern'    => $this->convertPattern($pattern),
-            'params'     => $this->extractParams($pattern),
-            'action'     => $action,
+            'method' => strtoupper($method),
+            'pattern' => $this->convertPattern($pattern),
+            'params' => $this->extractParams($pattern),
+            'action' => $action,
             'middleware' => $middleware
         ];
     }
 
-    public function get(string $pattern, array $action, array $middleware = []) {
+    public function get(string $pattern, array $action, array $middleware = [])
+    {
         $this->addRoute('GET', $pattern, $action, $middleware);
     }
 
-    public function post(string $pattern, array $action, array $middleware = []) {
+    public function post(string $pattern, array $action, array $middleware = [])
+    {
         $this->addRoute('POST', $pattern, $action, $middleware);
     }
 
-    public function put(string $pattern, array $action, array $middleware = []) {
+    public function put(string $pattern, array $action, array $middleware = [])
+    {
         $this->addRoute('PUT', $pattern, $action, $middleware);
     }
 
-    public function delete(string $pattern, array $action, array $middleware = []) {
+    public function delete(string $pattern, array $action, array $middleware = [])
+    {
         $this->addRoute('DELETE', $pattern, $action, $middleware);
     }
 
@@ -77,5 +81,11 @@ class Router
     {
         preg_match_all('/\{(\w+)\}/', $pattern, $matches);
         return $matches[1] ?? [];
+    }
+
+    public static function getDomain(): string
+    {
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+        return $protocol . "://" . $_SERVER['HTTP_HOST'];
     }
 }

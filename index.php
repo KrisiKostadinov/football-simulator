@@ -22,9 +22,11 @@ $router->get('/', [HomeController::class, 'index']);
 $router->get('/users/register', [UserController::class, 'register'], [GuestMiddleware::class]);
 $router->get('/users/login', [UserController::class, 'login'], [GuestMiddleware::class]);
 $router->get('/users/logout', [UserController::class, 'logout'], [AuthMiddleware::class]);
+$router->get('/users/forgot-password', [UserController::class, 'forgotPassword'], [GuestMiddleware::class]);
 
 $router->post('/users/register', [UserController::class, 'registerAction']);
 $router->post('/users/login', [UserController::class, 'loginAction']);
+$router->post('/users/forgot-password', [UserController::class, 'forgotPasswordAction']);
 
 session_start();
 
