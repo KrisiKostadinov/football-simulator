@@ -13,18 +13,12 @@
                 <p class="text-red-500 text-sm mt-1"><?= $errors['general'] ?></p>
             </div>
         <?php endif; ?>
-        
-        <div>
-            <label for="current_password" class="<?= $label_class_names ?>"><?= __('current_password') ?></label>
-            <input type="password" id="current_password" value="<?= $old['current_password'] ?? '' ?>" name="current_password" class="<?= $input_class_names ?>" />
-            <?php if (isset($errors['current_password'])): ?>
-                <p class="text-red-500 text-sm mt-1"><?= $errors['current_password'] ?></p>
-            <?php endif; ?>
-        </div>
+
+        <input type="text" name="token" value="<?= htmlspecialchars($token ?? $old['token']) ?>" hidden>
 
         <div>
             <label for="new_password" class="<?= $label_class_names ?>"><?= __('new_password') ?></label>
-            <input type="password" id="new_password" value="<?= $old['new_password'] ?? '' ?>" name="new_password" class="<?= $input_class_names ?>" />
+            <input type="password" id="new_password" name="new_password" class="<?= $input_class_names ?>" />
             <?php if (isset($errors['new_password'])): ?>
                 <p class="text-red-500 text-sm mt-1"><?= $errors['new_password'] ?></p>
             <?php endif; ?>
@@ -32,9 +26,9 @@
 
         <div>
             <label for="new_password_confirm" class="<?= $label_class_names ?>"><?= __('new_password_confirm') ?></label>
-            <input type="password" id="new_password_confirm" value="<?= $old['new_password_confirm'] ?? '' ?>" name="new_password_confirm" class="<?= $input_class_names ?>" />
-            <?php if (isset($errors['new_password_confirm'])): ?>
-                <p class="text-red-500 text-sm mt-1"><?= $errors['new_password_confirm'] ?></p>
+            <input type="password" id="new_password_confirm" name="new_password_confirm" class="<?= $input_class_names ?>" />
+            <?php if (isset($errors['current_password'])): ?>
+                <p class="text-red-500 text-sm mt-1"><?= $errors['current_password'] ?></p>
             <?php endif; ?>
         </div>
 

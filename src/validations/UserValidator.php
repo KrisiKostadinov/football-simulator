@@ -69,10 +69,6 @@ class UserValidator
     {
         $errors = [];
 
-        if (empty($data['current_password']) || strlen($data['current_password']) < 6) {
-            $errors['current_password'] = __('validation_current_password');
-        }
-
         if (empty($data['new_password']) || strlen($data['new_password']) < 6) {
             $errors['new_password'] = __('validation_new_password');
         }

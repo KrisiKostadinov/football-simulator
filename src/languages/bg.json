@@ -57,5 +57,6 @@
   "new_password": "Нова парола",
   "new_password_confirm":"Потвърждение на текущата парола",
   "change_password_title": "Промяна на паролата",
-  "change_password_confirm": "Потвърждаване на промяната на паролата"
+  "change_password_confirm": "Потвърждаване на промяната на паролата",
+  "submit_forgot_password": "Изпрати инструкции за възстановяване"
 }

@@ -37,14 +37,18 @@ class UserController
     public function changePassword(string $token)
     {
         $user = $this->userRepository->findByPasswordResetToken($token);
-        if (!$user || strtotime($user['token_expiration']) >= time()) {
+
+        if (!$user || strtotime($user['token_expiration']) < time()) {
             $_SESSION['message_error'] = __('invalid_token');
             header('Location: /users/forgot-password');
             exit;
         }
 
         $_SESSION['reset_token'] = $token;
-        View::render('users/change_password', ['title' => __('change_password_title')]);
+        View::render('users/change_password', [
+            'title' => __('change_password_title'),
+            'token' => $token,
+        ]);
     }
 
     public function forgotPassword()
@@ -203,7 +207,7 @@ class UserController
         $errors = UserValidator::validateChangePassword($formData);
 
         if (!empty($errors)) {
-            return View::render('users/change-password', [
+            return View::render('users/change_password', [
                 'title' => __('change_password_title'),
                 'errors' => $errors,
                 'old' => $formData
@@ -211,7 +215,7 @@ class UserController
         }
 
         $user = $this->userRepository->findByPasswordResetToken($_SESSION['reset_token']);
-        if (!$user || strtotime($user['token_expiration']) >= time()) {
+        if (!$user || strtotime($user['token_expiration']) < time()) {
             $_SESSION['message_error'] = __('invalid_token');
             header('Location: /users/forgot-password');
             exit;
